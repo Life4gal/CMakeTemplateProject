@@ -1,0 +1,38 @@
+= CMakeTemplateProject
+Life4gal <Life4gal@gmail.com>
+:toc:
+:icons: font
+
+== Introduction
+
+This project can be used as a startup template for any project.
+
+The project currently contains the following dependencies:
+
+- link:cpm/CPM.cmake[CPM]
+- link:3rd-party/fmtlib.cmake[fmtlib]
+- link:3rd-party/spdlog.cmake[spdlog]
+- link:3rd-party/boost-ext-ut.cmake[boost-ext-ut]
+
+We use link:https://github.com/cpm-cmake/CPM.cmake[CPM] as our third-party library management tool.
+
+link:https://github.com/fmtlib/fmt[fmtlib]
+is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+
+link:https://github.com/gabime/spdlog[spdlog]
+Very fast, header-only/compiled, C++ logging library.
+
+link:https://github.com/boost-ext/ut[UT]
+C++20 μ(micro)/Unit Testing Framework
+
+Among them, only `CPM` is a must-dependency, and the other third-party libraries are only for demonstration purposes.
+footnote:[Of course, if you have other third-party libraries management tools, you can also not use `CPM`.]
+
+== Requirements
+
+- [*] CMake. (The higher, the better)
+- [*] CXX Compiler. (Support CXX20 and above, depending on your needs)
+- [*] Already champing at the bit.
+
+== License
+`NO?`
