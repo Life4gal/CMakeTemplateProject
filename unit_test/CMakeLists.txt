@@ -25,15 +25,12 @@ set(CMAKE_CXX_STANDARD 23)
 set_compile_options_private(${PROJECT_NAME})
 turn_off_warning(${PROJECT_NAME})
 
-set(${PROJECT_NAME}_LINK_LIBS "")
-
+CPM_link_libraries_DECL()
 include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/boost-ext-ut.cmake)
-
-message("The dependencies of project ${PROJECT_NAME} are: ${${PROJECT_NAME}_LINK_LIBS}")
+CPM_link_libraries_LINK()
 
 target_link_libraries(
 		${PROJECT_NAME}
 		PRIVATE
 		gal::CTP
-		${${PROJECT_NAME}_LINK_LIBS}
 )

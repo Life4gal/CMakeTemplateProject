@@ -5,5 +5,4 @@ CPMFindPackage(
 		OPTIONS "BOOST_UT_USE_WARNINGS_AS_ERORS ON"
 )
 
-CPM_add_package_source(ut)
-list(APPEND ${PROJECT_NAME}_LINK_LIBS ut)
+CPM_link_libraries_APPEND(ut PRIVATE)

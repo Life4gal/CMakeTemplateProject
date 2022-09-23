@@ -58,16 +58,8 @@ set(CMAKE_CXX_STANDARD 23)
 set_compile_options_private(${PROJECT_NAME})
 turn_off_warning(${PROJECT_NAME})
 
-set(${PROJECT_NAME}_LINK_LIBS "")
-
+CPM_link_libraries_DECL()
 include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/fmtlib.cmake)
 include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/spdlog.cmake)
-
-message("The dependencies of project ${PROJECT_NAME} are: ${${PROJECT_NAME}_LINK_LIBS}")
-
-target_link_libraries(
-	${PROJECT_NAME}
-	PUBLIC
-
-	${${PROJECT_NAME}_LINK_LIBS}
-)
+include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/eve.cmake)
+CPM_link_libraries_LINK()

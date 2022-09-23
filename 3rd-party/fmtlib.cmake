@@ -6,5 +6,4 @@ CPMFindPackage(
 		OPTIONS "FMT_PEDANTIC ON" "FMT_WERROR ON" "FMT_DOC OFF" "FMT_INSTALL ON" "FMT_TEST ON"
 )
 
-CPM_add_package_source(fmt)
-list(APPEND ${PROJECT_NAME}_LINK_LIBS fmt)
+CPM_link_libraries_APPEND(fmt PUBLIC)

@@ -10,4 +10,5 @@ auto main() -> int
 		<< "\nAnswer: " << ctp::answer() << '\n';
 
 	ctp::log_me();
+	ctp::check_wide();
 }
