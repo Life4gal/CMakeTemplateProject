@@ -13,6 +13,7 @@ The project currently contains the following dependencies:
 - link:3rd-party/fmtlib.cmake[fmtlib]
 - link:3rd-party/spdlog.cmake[spdlog]
 - link:3rd-party/boost-ext-ut.cmake[boost-ext-ut]
+- link:3rd-party/eve.cmake[eve]
 
 We use link:https://github.com/cpm-cmake/CPM.cmake[CPM] as our third-party library management tool.
 
@@ -24,6 +25,9 @@ Very fast, header-only/compiled, C++ logging library.
 
 link:https://github.com/boost-ext/ut[UT]
 C++20 μ(micro)/Unit Testing Framework
+
+link:https://github.com/jfalcou/eve[eve]
+is a reimplementation of the old EVE SIMD library by Falcou et al. which for a while was named Boost.SIMD. It's a C++20 and onward implementation of a type based wrapper around SIMD extensions sets for most current architectures. It aims at showing how C++20 can be used to design and implement efficient, low level, high abstraction library suited for high performances.
 
 Among them, only `CPM` is a must-dependency, and the other third-party libraries are only for demonstration purposes.
 footnote:[Of course, if you have other third-party libraries management tools, you can also not use `CPM`.]
