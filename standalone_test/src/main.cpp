@@ -1,5 +1,6 @@
 #include <CMakeTemplateProject/hello.hpp>
 #include <iostream>
+#include <span>
 
 auto main() -> int
 {
@@ -11,4 +12,14 @@ auto main() -> int
 
 	ctp::log_me();
 	ctp::check_wide();
+
+	auto *arr = static_cast<int *>(ctp::allocate(24 * sizeof(int)));
+
+	for (size_t i = 0; i < 24; ++i) {
+		arr[i] = int(i * 42);
+	}
+
+	for (const auto i : std::span{ arr, 24 }) {
+		std::cout << i << '\t';
+	}
 }

@@ -2,13 +2,13 @@
 #include <CMakeTemplateProject/hello.hpp>
 #include <boost/ut.hpp>
 
-CTP_DISABLE_WARNING_PUSH
-CTP_DISABLE_WARNING(-Wswitch-enum)
+//CTP_DISABLE_WARNING_PUSH
+//CTP_DISABLE_WARNING(-Wswitch-enum)
 
 // :(
 #include <fmt/format.h>
 
-CTP_DISABLE_WARNING_POP
+//CTP_DISABLE_WARNING_POP
 
 using namespace boost::ut;
 

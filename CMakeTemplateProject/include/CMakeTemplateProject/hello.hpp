@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 namespace ctp
 {
 	auto answer() -> int;
@@ -7,4 +9,6 @@ namespace ctp
 	auto log_me() -> void;
 
 	auto check_wide() -> void;
+
+	auto allocate(std::size_t size) -> void*;
 }
