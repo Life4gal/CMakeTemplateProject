@@ -14,7 +14,9 @@ else()
 	message("${PROJECT_NAME} info: Current build type is: [${CMAKE_BUILD_TYPE}-${CMAKE_CONFIGURATION_TYPES}]")
 endif(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 
-set(GSL_MSVC_BASIC_COMPILE_OPTIONS /std:c++latest /experimental:module /W4 /WX)
+set(GSL_MSVC_BASIC_COMPILE_OPTIONS /std:c++latest
+		#/experimental:module
+		/W4 /WX)
 set(GSL_MSVC_EXTRA_COMPILE_OPTIONS_Debug /MDd /Zi /Ob0 /Od /RTC1)
 set(GSL_MSVC_EXTRA_COMPILE_OPTIONS_Release /DNDEBUG /MD /O2 /Ob2)
 set(GSL_MSVC_EXTRA_COMPILE_OPTIONS_RelWithDebInfo /DNDEBUG /MD /Zi /O2 /Ob1)

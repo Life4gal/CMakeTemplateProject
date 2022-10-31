@@ -53,13 +53,12 @@ target_compile_definitions(
 	# TODO: MORE COMPILERS HERE.
 )
 
-# ?
-set(CMAKE_CXX_STANDARD 23)
-set_compile_options_private(${PROJECT_NAME})
-turn_off_warning(${PROJECT_NAME})
-
 CPM_link_libraries_DECL()
 include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/fmtlib.cmake)
 include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/spdlog.cmake)
 include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/eve.cmake)
+include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/bdwgc.cmake)
 CPM_link_libraries_LINK()
+
+set_compile_options_private(${PROJECT_NAME})
+turn_off_warning(${PROJECT_NAME})
