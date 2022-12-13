@@ -1,5 +1,5 @@
 project(
-		CMakeTemplateProkect-standalone-test
+		CMakeTemplateProject-standalone-test
 		LANGUAGES CXX
 )
 
@@ -26,7 +26,7 @@ target_include_directories(
 target_link_libraries(
 		${PROJECT_NAME}
 		PRIVATE
-		gal::CTP
+		gal::CTP-static
 )
 
 set_compile_options_private(${PROJECT_NAME})

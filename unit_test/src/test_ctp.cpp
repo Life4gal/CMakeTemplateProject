@@ -1,4 +1,3 @@
-#include <CMakeTemplateProject/macro.hpp>
 #include <CMakeTemplateProject/hello.hpp>
 #include <boost/ut.hpp>
 
