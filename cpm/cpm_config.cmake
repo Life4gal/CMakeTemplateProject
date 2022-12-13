@@ -1,9 +1,23 @@
 set(CPM_USE_LOCAL_PACKAGES ON)
 
 macro(CPM_link_libraries_DECL)
-	set(${PROJECT_NAME}_LINK_PUBLIC "")
-	set(${PROJECT_NAME}_LINK_PRIVATE "")
-	set(${PROJECT_NAME}_LINK_INTERFACE "")
+	set(extra_args ${ARGN})
+	# Currently we have only one optional parameter: prefix.
+	list(LENGTH extra_args extra_args_count)
+
+	set(CPM_LINK_TARGET_PREFIX "CPM_COMMON_LINK_TARGET")
+	if(${extra_args_count} EQUAL 1)
+		set(CPM_LINK_TARGET_PREFIX ${extra_args})
+	elseif(${extra_args_count} GREATER 1)
+		message(WARNING "Currently we have only one optional parameter: prefix.")
+	endif(${extra_args_count} EQUAL 1)
+
+	set(${CPM_LINK_TARGET_PREFIX}_HEADER_PUBLIC)
+	set(${CPM_LINK_TARGET_PREFIX}_HEADER_PRIVATE)
+	set(${CPM_LINK_TARGET_PREFIX}_HEADER_INTERFACE)
+	set(${CPM_LINK_TARGET_PREFIX}_LINK_PUBLIC)
+	set(${CPM_LINK_TARGET_PREFIX}_LINK_PRIVATE)
+	set(${CPM_LINK_TARGET_PREFIX}_LINK_INTERFACE)
 endmacro(CPM_link_libraries_DECL)
 
 set(CPM_link_libraries_LINK_TYPE PUBLIC PRIVATE INTERFACE)
@@ -58,37 +72,82 @@ macro(CPM_link_libraries_APPEND lib_name link_type)
 	###############################################
 	# PUBLIC
 	if(append_type_index EQUAL 0)
-		list(APPEND ${PROJECT_NAME}_LINK_PUBLIC ${lib_name})
-		message("Project [${PROJECT_NAME}] will [PUBLIC] link [${lib_name}].")
+		list(APPEND ${CPM_LINK_TARGET_PREFIX}_LINK_PUBLIC ${lib_name})
+		list(APPEND ${CPM_LINK_TARGET_PREFIX}_HEADER_PUBLIC ${${lib_name}_SOURCE_DIR}/include)
 	# PRIVATE
 	elseif(append_type_index EQUAL 1)
-		list(APPEND ${PROJECT_NAME}_LINK_PRIVATE ${lib_name})
-		message("Project [${PROJECT_NAME}] will [PRIVATE] link [${lib_name}].")
+		list(APPEND ${CPM_LINK_TARGET_PREFIX}_LINK_PRIVATE ${lib_name})
+		list(APPEND ${CPM_LINK_TARGET_PREFIX}_HEADER_PRIVATE ${${lib_name}_SOURCE_DIR}/include)
 	# INTERFACE
 	elseif(append_type_index EQUAL 2)
-		list(APPEND ${PROJECT_NAME}_LINK_INTERFACE ${lib_name})
-		message("Project [${PROJECT_NAME}] will [INTERFACE] link [${lib_name}].")
+		list(APPEND ${CPM_LINK_TARGET_PREFIX}_LINK_INTERFACE ${lib_name})
+		list(APPEND ${CPM_LINK_TARGET_PREFIX}_HEADER_INTERFACE ${${lib_name}_SOURCE_DIR}/include)
 	else()
 		message(FATAL_ERROR "Impossible happened!!!")
 	endif(append_type_index EQUAL 0)
 endmacro(CPM_link_libraries_APPEND)
 
-macro(CPM_link_libraries_LINK)
-	message("The dependencies of project ${PROJECT_NAME} are:
-		[PUBLIC:    ${${PROJECT_NAME}_LINK_PUBLIC}]
-		[PRIVATE:   ${${PROJECT_NAME}_LINK_PRIVATE}]
-		[INTERFACE: ${${PROJECT_NAME}_LINK_INTERFACE}]")
+macro(CPM_link_libraries_LINK project_name)
+	set(extra_args ${ARGN})
+	# Currently we have only one optional parameter: prefix.
+	list(LENGTH extra_args extra_args_count)
+
+	set(CPM_LINK_TARGET_PREFIX "CPM_COMMON_LINK_TARGET")
+	if(${extra_args_count} EQUAL 1)
+		set(CPM_LINK_TARGET_PREFIX ${extra_args})
+	elseif(${extra_args_count} GREATER 1)
+		message(WARNING "Currently we have only one optional parameter: prefix.")
+	endif(${extra_args_count} EQUAL 1)
+
+	foreach(public_library IN LISTS ${CPM_LINK_TARGET_PREFIX}_LINK_PUBLIC)
+		message(VERBOSE "Project [${project_name}] will [PUBLIC] link [${public_library}].")
+	endforeach(public_library IN LISTS ${CPM_LINK_TARGET_PREFIX}_LINK_PUBLIC)
+	foreach(public_header IN LISTS ${CPM_LINK_TARGET_PREFIX}_HEADER_PUBLIC)
+		message(VERBOSE "Project [${project_name}] will [PUBLIC] include [${public_header}].")
+	endforeach(public_header IN LISTS ${CPM_LINK_TARGET_PREFIX}_HEADER_PUBLIC)
+
+	foreach(private_library IN LISTS ${CPM_LINK_TARGET_PREFIX}_LINK_PRIVATE)
+		message(VERBOSE "Project [${project_name}] will [PRIVATE] link [${private_library}].")
+	endforeach(private_library IN LISTS ${CPM_LINK_TARGET_PREFIX}_LINK_PRIVATE)
+	foreach(private_header IN LISTS ${CPM_LINK_TARGET_PREFIX}_HEADER_PRIVATE)
+		message(VERBOSE "Project [${project_name}] will [PRIVATE] include [${private_header}].")
+	endforeach(private_header IN LISTS ${CPM_LINK_TARGET_PREFIX}_HEADER_PRIVATE)
+
+	foreach(interface_library IN LISTS ${CPM_LINK_TARGET_PREFIX}_LINK_INTERFACE)
+		message(VERBOSE "Project [${project_name}] will [INTERFACE] link [${interface_library}].")
+	endforeach(interface_library IN LISTS ${CPM_LINK_TARGET_PREFIX}_LINK_INTERFACE)
+	foreach(interface_header IN LISTS ${CPM_LINK_TARGET_PREFIX}_HEADER_INTERFACE)
+		message(VERBOSE "Project [${project_name}] will [INTERFACE] include [${interface_header}].")
+	endforeach(interface_header IN LISTS ${CPM_LINK_TARGET_PREFIX}_HEADER_INTERFACE)
+
+	message("The dependencies of project ${project_name} are:
+	[PUBLIC:    ${${CPM_LINK_TARGET_PREFIX}_LINK_PUBLIC}]
+	[PRIVATE:   ${${CPM_LINK_TARGET_PREFIX}_LINK_PRIVATE}]
+	[INTERFACE: ${${CPM_LINK_TARGET_PREFIX}_LINK_INTERFACE}]")
 
 	target_link_libraries(
-		${PROJECT_NAME}
+		${project_name}
 
 		PUBLIC
-		${${PROJECT_NAME}_LINK_PUBLIC}
+		${${CPM_LINK_TARGET_PREFIX}_LINK_PUBLIC}
 
 		PRIVATE
-		${${PROJECT_NAME}_LINK_PRIVATE}
+		${${CPM_LINK_TARGET_PREFIX}_LINK_PRIVATE}
 
 		INTERFACE
-		${${PROJECT_NAME}_LINK_INTERFACE}
+		${${CPM_LINK_TARGET_PREFIX}_LINK_INTERFACE}
+	)
+
+	target_include_directories(
+		${project_name}
+
+		PUBLIC
+		${${CPM_LINK_TARGET_PREFIX}_HEADER_PUBLIC}
+
+		PRIVATE
+		${${CPM_LINK_TARGET_PREFIX}_HEADER_PRIVATE}
+
+		INTERFACE
+		${${CPM_LINK_TARGET_PREFIX}_HEADER_INTERFACE}
 	)
 endmacro(CPM_link_libraries_LINK)
