@@ -19,8 +19,6 @@ add_library(
 	${${PROJECT_NAME}_SOURCE}
 )
 
-set_property(TARGET ${PROJECT_NAME}-objlib PROPERTY POSITION_INDEPENDENT_CODE ON)
-
 target_include_directories(
 	${PROJECT_NAME}-objlib
 	PUBLIC
