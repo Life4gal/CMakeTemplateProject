@@ -18,14 +18,11 @@ add_executable(
 )
 
 target_compile_definitions(
-	${PROJECT_NAME}
-	PUBLIC
+		${PROJECT_NAME}
+		PUBLIC
 
-	BOOST_UT_DISABLE_MODULE
+		BOOST_UT_DISABLE_MODULE
 )
-
-set_compile_options_private(${PROJECT_NAME})
-turn_off_warning(${PROJECT_NAME})
 
 CPM_link_libraries_DECL()
 include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/boost-ext-ut.cmake)
@@ -52,3 +49,11 @@ target_link_libraries(
 #		PRIVATE
 #		CTP-shared
 #)
+
+set_compile_options_private(${PROJECT_NAME})
+turn_off_warning(${PROJECT_NAME})
+
+add_test(
+		NAME ${PROJECT_NAME}
+		COMMAND ${PROJECT_NAME}
+)

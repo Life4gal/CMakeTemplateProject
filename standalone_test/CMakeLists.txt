@@ -13,7 +13,7 @@ file(
 
 add_executable(
 		${PROJECT_NAME}
-		
+
 		${${PROJECT_NAME}_SOURCE}
 )
 
@@ -31,3 +31,8 @@ target_link_libraries(
 
 set_compile_options_private(${PROJECT_NAME})
 turn_off_warning(${PROJECT_NAME})
+
+add_test(
+		NAME ${PROJECT_NAME}
+		COMMAND ${PROJECT_NAME}
+)
