@@ -34,18 +34,18 @@ jobs:
           key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
 
       - name: Create Build Environment
-        run: cmake -E make_directory build
+        run: cmake -E make_directory out/build/linux-x64-${{matrix.build_type}}-${{matrix.toolset}}/
 
       - name: Configure
-        working-directory: build/
+        working-directory: out/build/linux-x64-${{matrix.build_type}}-${{matrix.toolset}}/
         run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.build_type}} --preset linux-x64-${{matrix.build_type}}-${{matrix.toolset}}
 
       - name: Build
-        working-directory: build/
+        working-directory: out/build/linux-x64-${{matrix.build_type}}-${{matrix.toolset}}/
         run: cmake --build . --config ${{matrix.build_type}}
 
       - name: Test
-        working-directory: build/
+        working-directory: out/build/linux-x64-${{matrix.build_type}}-${{matrix.toolset}}/
         run: ctest -C ${{matrix.build_type}} --output-on-failure
 
   macos:
@@ -108,17 +108,17 @@ jobs:
           key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
 
       - name: Create Build Environment
-        run: cmake -E make_directory build
+        run: cmake -E make_directory out/build/win-x64-${{matrix.build_type}}-${{matrix.toolset}}/
 
       - name: Configure
         shell: bash
-        working-directory: build/
+        working-directory: out/build/win-x64-${{matrix.build_type}}-${{matrix.toolset}}/
         run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.build_type}} --preset win-x64-${{matrix.build_type}}-${{matrix.toolset}}
 
       - name: Build
-        working-directory: build/
+        working-directory: out/build/win-x64-${{matrix.build_type}}-${{matrix.toolset}}/
         run: cmake --build . --config ${{matrix.build_type}}
 
       - name: Test
-        working-directory: build/
+        working-directory: out/build/win-x64-${{matrix.build_type}}-${{matrix.toolset}}/
         run: ctest -C ${{matrix.build_type}} --output-on-failure
