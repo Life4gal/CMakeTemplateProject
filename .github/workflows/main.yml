@@ -1,0 +1,115 @@
+name: Main CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  CTEST_OUTPUT_ON_FAILURE: 1
+  CPM_SOURCE_CACHE: ${{ github.workspace }}/cpm_modules
+
+jobs:
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        toolset: [ Clang, GCC ]
+        build_type: [ Debug, Release ]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: "**/cpm_modules"
+          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
+
+      - name: Create Build Environment
+        run: cmake -E make_directory build
+
+      - name: Configure
+        working-directory: build/
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DGITHUB_WORKFLOWS:BOOL=TRUE
+
+      - name: Build
+        working-directory: build/
+        run: cmake --build . --config ${{matrix.build_type}}
+
+      - name: Test
+        working-directory: build/
+        run: ctest -C ${{matrix.build_type}} --output-on-failure
+
+  macos:
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode:
+          - '13'
+
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: "**/cpm_modules"
+          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{matrix.xcode}}
+
+      - name: Create Build Environment
+        run: cmake -E make_directory build
+
+      - name: Configure
+        working-directory: build/
+        run: cmake $GITHUB_WORKSPACE -DGITHUB_WORKFLOWS:BOOL=TRUE
+
+      - name: Build
+        working-directory: build/
+        run: cmake --build .
+
+      - name: Test
+        working-directory: build/
+        run: ctest --output-on-failure
+
+  windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        toolset: [ ClangCl, v143 ]
+        build_type: [ Debug, Release ]
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: "**/cpm_modules"
+          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
+
+      - name: Create Build Environment
+        run: cmake -E make_directory build
+
+      - name: Configure
+        shell: bash
+        working-directory: build/
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DGITHUB_WORKFLOWS:BOOL=TRUE
+
+      - name: Build
+        working-directory: build/
+        run: cmake --build . --config ${{matrix.build_type}}
+
+      - name: Test
+        working-directory: build/
+        run: ctest -C ${{matrix.build_type}} --output-on-failure
