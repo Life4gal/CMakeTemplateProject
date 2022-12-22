@@ -9,7 +9,7 @@ set(
 
 set(
 		${PROJECT_NAME_PREFIX}MINOR_VERSION
-		1
+		2
 )
 
 set(
@@ -38,6 +38,22 @@ set(${PROJECT_NAME_PREFIX}COMPILER_VERSION ${${PROJECT_NAME_PREFIX}COMPILER_NAME
 set(${PROJECT_NAME_PREFIX}GLOBAL_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 set(${PROJECT_NAME_PREFIX}CMAKE_MODULE_PATH ${${PROJECT_NAME_PREFIX}GLOBAL_SOURCE_PATH}/cmake)
 set(${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH ${${PROJECT_NAME_PREFIX}GLOBAL_SOURCE_PATH}/3rd-party)
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+	message("${PROJECT_NAME} info: Setting build type to 'RelWithDebInfo' as none was specified.")
+	set(
+			CMAKE_BUILD_TYPE RelWithDebInfo
+			CACHE STRING "Choose the type of build." FORCE
+	)
+	set_property(
+			CACHE
+			CMAKE_BUILD_TYPE
+			PROPERTY STRINGS
+			"Debug" "Release" "MinSizeRel" "RelWithDebInfo"
+	)
+else()
+	message("${PROJECT_NAME} info: Current build type is: [${CMAKE_BUILD_TYPE}-${CMAKE_CONFIGURATION_TYPES}]")
+endif(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 
 include(${${PROJECT_NAME_PREFIX}CMAKE_MODULE_PATH}/compile_options_setter.cmake)
 include(${${PROJECT_NAME_PREFIX}CMAKE_MODULE_PATH}/turn_off_warning.cmake)

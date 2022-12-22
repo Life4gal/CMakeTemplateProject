@@ -35,6 +35,9 @@ include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/eve.cmake)
 include(${${PROJECT_NAME_PREFIX}CMAKE_3RDPARTY_PATH}/bdwgc.cmake)
 CPM_link_libraries_LINK(${PROJECT_NAME}-objlib)
 
+set_compile_property(${PROJECT_NAME}-objlib)
+turn_off_warning(${PROJECT_NAME}-objlib)
+
 # shared and static libraries built from the same object files
 # see target_link_libraries below (in project_setup)
 
@@ -89,9 +92,6 @@ function(project_setup project_name)
 			$<$<AND:$<CXX_COMPILER_ID:Clang>,$<NOT:$<STREQUAL:"${CMAKE_CXX_SIMULATE_ID}","MSVC">>>:${PROJECT_NAME_PREFIX}COMPILER_CLANG>
 			# TODO: MORE COMPILERS HERE.
 	)
-
-	set_compile_options_private(${project_name})
-	turn_off_warning(${project_name})
 endfunction(project_setup)
 
 project_setup(${PROJECT_NAME}-shared)

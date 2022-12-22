@@ -29,7 +29,7 @@ target_link_libraries(
 		gal::CTP-static
 )
 
-set_compile_options_private(${PROJECT_NAME})
+set_compile_property(${PROJECT_NAME})
 turn_off_warning(${PROJECT_NAME})
 
 add_test(
