@@ -191,7 +191,7 @@ function(set_compile_property target_name)
 		set_target_properties(
 				${target_name}
 				PROPERTIES
-				COMPILE_OPTIONS "/W4;/WX"
+				COMPILE_OPTIONS "/W4;/WX;/D_CRT_SECURE_NO_WARNINGS"
 		)
 	elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 		set_target_properties(
@@ -202,10 +202,11 @@ function(set_compile_property target_name)
 	elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 		if ("${CMAKE_CXX_SIMULATE_ID}" STREQUAL "MSVC")
 			# clang-cl
+			# todo: It looks like the above command passes -std=c++20 to clang-cl (instead of /std:c++latest)
 			set_target_properties(
 					${target_name}
 					PROPERTIES
-					COMPILE_OPTIONS "/W4;/WX"
+					COMPILE_OPTIONS "/W4;/WX;/D_CRT_SECURE_NO_WARNINGS;/std:c++latest"
 			)
 		else ()
 			# clang
