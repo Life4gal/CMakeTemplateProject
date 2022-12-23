@@ -12,11 +12,15 @@ set(
 set(
 		GSL_CLANG_CL_WARNINGS
 
+		# for boostext.ut
+		-Wno-global-constructors
 )
 
 set(
 		GSL_CLANG_WARNINGS
 
+		# for boostext.ut
+		-Wno-global-constructors
 )
 
 macro(turn_off_warning target_name)
