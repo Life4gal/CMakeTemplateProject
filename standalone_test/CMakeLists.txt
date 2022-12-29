@@ -26,11 +26,8 @@ target_include_directories(
 target_link_libraries(
 		${PROJECT_NAME}
 		PRIVATE
-		gal::CTP-static
+		CMakeTemplateProject::CMakeTemplateProject
 )
-
-set_compile_property(${PROJECT_NAME})
-turn_off_warning(${PROJECT_NAME})
 
 add_test(
 		NAME ${PROJECT_NAME}

@@ -1,0 +1,9 @@
+CPMFindPackage(
+		NAME fmt
+		# GIT_TAG master
+		GIT_TAG 9.1.0
+		GITHUB_REPOSITORY "fmtlib/fmt"
+		OPTIONS "FMT_PEDANTIC ON" "FMT_WERROR OFF" "FMT_DOC OFF" "FMT_INSTALL ON" "FMT_TEST OFF"
+)
+
+cpm_install(${PROJECT_NAME} fmt PUBLIC)

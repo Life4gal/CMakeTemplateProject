@@ -5,4 +5,4 @@ CPMFindPackage(
 		OPTIONS "BOOST_UT_USE_WARNINGS_AS_ERORS ON"
 )
 
-CPM_link_libraries_APPEND(ut PRIVATE)
+cpm_install(${PROJECT_NAME} ut PRIVATE)
