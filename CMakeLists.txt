@@ -14,7 +14,7 @@ set(
 
 set(
 		${PROJECT_NAME_PREFIX}PATCH_VERSION
-		1
+		2
 )
 
 set(${PROJECT_NAME_PREFIX}VERSION ${${PROJECT_NAME_PREFIX}MAJOR_VERSION}.${${PROJECT_NAME_PREFIX}MINOR_VERSION}.${${PROJECT_NAME_PREFIX}PATCH_VERSION})
@@ -262,8 +262,16 @@ target_include_directories(
 
 # LINK 3rd-PARTY LIBRARIES
 set(${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES "")
-include(${PROJECT_SOURCE_DIR}/3rd-party/fmtlib/fmt.cmake)
-include(${PROJECT_SOURCE_DIR}/3rd-party/spdlog/spdlog.cmake)
+include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/fmtlib/fmt.cmake)
+include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/spdlog/spdlog.cmake)
+include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/openssl/openssl.cmake)
+
+message(STATUS "=======================================")
+message(STATUS "[${PROJECT_NAME}] DEPENDENCIES:")
+foreach(DEPENDENCY IN LISTS ${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES)
+	message(STATUS "-->\t\t ${DEPENDENCY}")
+endforeach(DEPENDENCY IN LISTS ${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES)
+message(STATUS "=======================================")
 
 # SET DEBUG POSTFIX ==> lib${PROJECT_NAME} -> Release lib${PROJECT}d -> Debug
 set(${PROJECT_NAME_PREFIX}DEBUG_POSTFIX d CACHE STRING "Debug library postfix.")
