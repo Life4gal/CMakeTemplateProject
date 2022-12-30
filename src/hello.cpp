@@ -31,7 +31,7 @@ namespace ctp
 
 		// write result
 		std::string ret{};
-		ret.resize(static_cast<std::string::size_type>(md5_digest_len));
+		ret.resize(static_cast<std::string::size_type>(md5_digest_len) * 2);
 		for (decltype(md5_digest_len) i = 0; i < md5_digest_len; ++i)
 		{
 			sprintf(ret.data() + i * 2, "%02x", md5_digest[i]);

@@ -1,3 +1,4 @@
+#include <CMakeTemplateProject/easy_network.hpp>
 #include <CMakeTemplateProject/hello.hpp>
 #include <iostream>
 
@@ -11,4 +12,6 @@ auto main() -> int
 			  << "\nMD5 of string [\"CMakeTemplateProject\"]: " << ctp::md5("CMakeTemplateProject") << '\n';
 
 	ctp::log_me();
+
+	std::cout << std::boolalpha << ctp::EasyNetwork::https_support_check() << '\n';
 }
