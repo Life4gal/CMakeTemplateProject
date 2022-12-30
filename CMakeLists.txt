@@ -27,6 +27,8 @@ if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 else ()
 endif (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake_utils/doc_var.cmake)
+
 # Set the default CMAKE_BUILD_TYPE to RelWithDebInfo.
 # This should be done before the project command since the latter can set
 # CMAKE_BUILD_TYPE itself.
@@ -60,7 +62,6 @@ include(CheckCXXCompilerFlag)
 
 include(${PROJECT_SOURCE_DIR}/cmake_utils/CPM.cmake)
 set(CPM_USE_LOCAL_PACKAGES ON)
-include(${PROJECT_SOURCE_DIR}/cmake_utils/doc_var.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake_utils/cpm_install.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake_utils/nuget_install.cmake)
 set(${PROJECT_NAME_PREFIX}3RD_PARTY_PATH ${PROJECT_SOURCE_DIR}/3rd-party)
