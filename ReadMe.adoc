@@ -4,39 +4,53 @@ Life4gal <Life4gal@gmail.com>
 :icons: font
 
 == Introduction
+For a modern C++ project, there is always a lot of repetitive preparation work.
+Not to mention configuring test environments, continuous integration, etc.
+This project template is designed to alleviate this to some extent by drawing from the best of many projects and constantly updating.
 
-This project can be used as a startup template for any project.
+== Features
 
-The project currently contains the following dependencies:
+todo
 
-- link:cpm/CPM.cmake[CPM]
-- link:3rd-party/fmtlib.cmake[fmtlib]
-- link:3rd-party/spdlog.cmake[spdlog]
-- link:3rd-party/boost-ext-ut.cmake[boost-ext-ut]
-- link:3rd-party/eve.cmake[eve]
-
-We use link:https://github.com/cpm-cmake/CPM.cmake[CPM] as our third-party library management tool.
-
-link:https://github.com/fmtlib/fmt[fmtlib]
-is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
-
-link:https://github.com/gabime/spdlog[spdlog]
-Very fast, header-only/compiled, C++ logging library.
-
-link:https://github.com/boost-ext/ut[UT]
-C++20 μ(micro)/Unit Testing Framework
-
-link:https://github.com/jfalcou/eve[eve]
-is a reimplementation of the old EVE SIMD library by Falcou et al. which for a while was named Boost.SIMD. It's a C++20 and onward implementation of a type based wrapper around SIMD extensions sets for most current architectures. It aims at showing how C++20 can be used to design and implement efficient, low level, high abstraction library suited for high performances.
-
-Among them, only `CPM` is a must-dependency, and the other third-party libraries are only for demonstration purposes.
-footnote:[Of course, if you have other third-party libraries management tools, you can also not use `CPM`.]
 
 == Requirements
 
-- [*] CMake. (The higher, the better)
-- [*] CXX Compiler. (Support CXX20 and above, depending on your needs)
-- [*] Already champing at the bit.
+For external dependencies, we have two main ways to use them:
+
+* Pre-compiled binaries
+* Compile from scratch
+
+If we use pre-compiled binaries, we can greatly reduce the compilation time of our project,
+especially if the external dependencies are very large and particularly time-consuming to compile (e.g. Boost).
+If we need to distribute, we can just distribute our own program,
+and the rest of the dependencies can be dynamically dependent on the runtime environment.
+
+If we compile from scratch, we no longer need to rely on the target environment to have the dependencies we need.
+We can easily compile the entire project from anywhere and strictly control the versioning of each dependency,
+making source code distribution much easier.
+
+However, nothing is absolute, and we can combine them to maximize their respective advantages.
+
+For Linux platforms, pre-compiled binaries seem to be the best choice, and the various distributions have their own reliable package managers, so there is nothing to worry about.
+
+But the Windows platform is a bit awkward, it does not have a unified path to install various pre-compiled binary dependencies, and there is no proper package manager.
+
+The good thing is that the situation has improved somewhat,
+now there are C++ package managers such as:
+
+- link:https://github.com/microsoft/vcpkg[`vcpkg`]
+- link:https://conan.io/[`conan`]
+- link:https://github.com/ruslo/hunter[`hunter`]
+- link:https://github.com/cpm-cmake/CPM.cmake[`CPM`]
+
+They have their own merits and will not be discussed too much in this project.
+
+This project is to demonstrate project management using `NuGet` (on Windows platform) and using `CPM` (Windows or Linux platform).
+
+Maybe we'll consider using `vcpkg` later, but for now it's a bit "uncontrollable".
 
 == License
-`NO?`
+see link:LICENSE[License].
+
+== Off Topic
+Any contributions are welcome, and if you have any questions, please submit an issue.
