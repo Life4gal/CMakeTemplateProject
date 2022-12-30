@@ -1,6 +1,5 @@
 #include <CMakeTemplateProject/hello.hpp>
 #include <iostream>
-#include <span>
 
 auto main() -> int
 {

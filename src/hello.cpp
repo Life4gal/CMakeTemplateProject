@@ -12,6 +12,6 @@ namespace ctp
 
 	auto log_me() -> void
 	{
-		spdlog::info("`{}` called.", __func__);
+		SPDLOG_INFO("`{}` called.", __func__);
 	}
 }// namespace ctp

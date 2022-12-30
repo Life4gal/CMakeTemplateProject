@@ -21,7 +21,7 @@ function(
 		this_project
 		linked_project
 		link_type
-		# linked_library = linked_project
+		# linked_target = linked_project
 )
 	###############################################
 	############# CHECK LINK TYPE #################
@@ -35,71 +35,84 @@ function(
 	################ ADD LIBRARY ##################
 	###############################################
 	if (${linked_project}_ADDED)
-		message("Successfully added [${linked_project}], the source files path is [${${linked_project}_SOURCE_DIR}], the binary files path is [${${linked_project}_BINARY_DIR}]!")
+		message(STATUS "Successfully added [${linked_project}], the source files path is [${${linked_project}_SOURCE_DIR}], the binary files path is [${${linked_project}_BINARY_DIR}]!")
 	else ()
-		message("Found the local [${linked_project}] package, the source files path is [${${linked_project}_SOURCE_DIR}], the binary files path is [${${linked_project}_BINARY_DIR}]!")
-		# add_subdirectory(
-		# 		${${linked_project}_SOURCE_DIR}
-		# 		${${linked_project}_BINARY_DIR}
-		# 		EXCLUDE_FROM_ALL
-		# )
+		if(${linked_project}_SOURCE_DIR)
+			message(STATUS "Found the local [${linked_project}] package, the source files path is [${${linked_project}_SOURCE_DIR}], the binary files path is [${${linked_project}_BINARY_DIR}]!")
+			# add_subdirectory(
+			# 		${${linked_project}_SOURCE_DIR}
+			# 		${${linked_project}_BINARY_DIR}
+			# 		EXCLUDE_FROM_ALL
+			# )
+		else()
+			message(FATAL_ERROR "Library [${linked_project}] not found!")
+		endif(${linked_project}_SOURCE_DIR)
 	endif (${linked_project}_ADDED)
 
 	###############################################
 	########### CHECK OPTIONAL ARGS ###############
 	###############################################
-	if (${ARGC} MATCHES 2)
-		list(GET ARGN 0 linked_library)
-		set(linked_project linked_library)
-		message("The library's name [${linked_library}] is different with the project's name [${linked_project}], the library's name will be used as the linked library name!")
-	endif (${ARGC} MATCHES 2)
+	if (NOT (${ARGC} MATCHES 3))
+		list(GET ARGN 0 linked_target)
+		message(STATUS "The target's name [${linked_target}] is different with the project's name [${linked_project}], the target's name will be used as the linked library name!")
+	else()
+		set(linked_target ${linked_project})
+	endif (NOT (${ARGC} MATCHES 3))
 
 	###############################################
 	############### LINK_LIBRARY ##################
 	###############################################
+	message(STATUS "Project [${this_project}] will [${link_type}] link [${linked_target}].")
 	if (link_type_index EQUAL 0)
 		# PUBLIC
-		message(STATUS "Project [${this_project}] will [PUBLIC] link [${linked_project}].")
-
-		target_include_directories(
-				${this_project}
-				SYSTEM PUBLIC
-				${${linked_project}_SOURCE_DIR}/include
-		)
+#		target_include_directories(
+#				${this_project}
+#				SYSTEM
+#				PUBLIC
+#				${${linked_project}_SOURCE_DIR}/include
+#		)
 		target_link_libraries(
 				${this_project}
 				PUBLIC
-				${linked_prokect}
+				${linked_target}
 		)
 	elseif (link_type_index EQUAL 1)
 		# PRIVATE
-		message(STATUS "Project [${this_project}] will [PRIVATE] link [${linked_project}].")
-
-		target_include_directories(
-				${this_project}
-				SYSTEM PRIVATE
-				${${linked_project}_SOURCE_DIR}/include
-		)
+#		target_include_directories(
+#				${this_project}
+#				SYSTEM
+#				PRIVATE
+#				${${linked_project}_SOURCE_DIR}/include
+#		)
 		target_link_libraries(
 				${this_project}
 				PRIVATE
-				${linked_prokect}
+				${linked_target}
 		)
 	elseif (link_type_index EQUAL 2)
 		# INTERFACE
-		message(STATUS "Project [${this_project}] will [INTERFACE] link [${linked_project}].")
-
-		target_include_directories(
-				${this_project}
-				SYSTEM INTERFACE
-				${${linked_project}_SOURCE_DIR}/include
-		)
+#		target_include_directories(
+#				${this_project}
+#				SYSTEM
+#				INTERFACE
+#				${${linked_project}_SOURCE_DIR}/include
+#		)
 		target_link_libraries(
 				${this_project}
 				INTERFACE
-				${linked_prokect}
+				${linked_target}
 		)
 	else ()
 		message(FATAL_ERROR "Impossible happened!!!Invalid link type ${link_type}.")
 	endif (link_type_index EQUAL 0)
+
+	# todo: `PUBLIC` and `INTERFACE` items will populate the `INTERFACE_INCLUDE_DIRECTORIES` property of <target>.
+	# If a non-PRIVATE directory include will causes vvv
+	# Target <target> interface_include_directories property contains path: <dependency header files path> which is prefixed in the build directory.
+	target_include_directories(
+			${this_project}
+			SYSTEM
+			PRIVATE
+			${${linked_project}_SOURCE_DIR}/include
+	)
 endfunction(cpm_install)

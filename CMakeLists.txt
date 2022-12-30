@@ -229,9 +229,9 @@ target_compile_definitions(
 		$<$<CXX_COMPILER_ID:MSVC>:${PROJECT_NAME_PREFIX}COMPILER_MSVC>
 		$<$<CXX_COMPILER_ID:GNU>:${PROJECT_NAME_PREFIX}COMPILER_GNU>
 		# clang-cl
-		$<$<AND:$<CXX_COMPILER_ID:Clang>,$<STREQUAL: "${CMAKE_CXX_SIMULATE_ID}" ,"MSVC">>:${PROJECT_NAME_PREFIX}COMPILER_CLANG_CL>
+		$<$<AND:$<CXX_COMPILER_ID:Clang>,$<STREQUAL:"${CMAKE_CXX_SIMULATE_ID}","MSVC">>:${PROJECT_NAME_PREFIX}COMPILER_CLANG_CL>
 		# clang
-		$<$<AND:$<CXX_COMPILER_ID:Clang>,$<NOT:$<STREQUAL: "${CMAKE_CXX_SIMULATE_ID}" ,"MSVC">>>:${PROJECT_NAME_PREFIX}COMPILER_CLANG>
+		$<$<AND:$<CXX_COMPILER_ID:Clang>,$<NOT:$<STREQUAL:"${CMAKE_CXX_SIMULATE_ID}","MSVC">>>:${PROJECT_NAME_PREFIX}COMPILER_CLANG>
 		# apple clang
 		$<$<CXX_COMPILER_ID:AppleClang>:${PROJECT_NAME_PREFIX}COMPILER_APPLE_CLANG>
 )
@@ -257,11 +257,13 @@ target_include_directories(
 		${${PROJECT_NAME_PREFIX}HEADER_ATTRIBUTES}
 		PUBLIC
 		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-		$<INSTALL_INTERFACE:${${PROJECT_NAME_PREFIX}INSTALL_HEADERS}>)
+		$<INSTALL_INTERFACE:${${PROJECT_NAME_PREFIX}INSTALL_HEADERS}/${PROJECT_NAME}-${PROJECT_VERSION}>
+)
 
 # LINK 3rd-PARTY LIBRARIES
-#include(${PROJECT_SOURCE_DIR}/3rd-party/fmtlib/fmt.cmake)
-#include(${PROJECT_SOURCE_DIR}/3rd-party/spdlog/spdlog.cmake)
+set(${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES "")
+include(${PROJECT_SOURCE_DIR}/3rd-party/fmtlib/fmt.cmake)
+include(${PROJECT_SOURCE_DIR}/3rd-party/spdlog/spdlog.cmake)
 
 # SET DEBUG POSTFIX ==> lib${PROJECT_NAME} -> Release lib${PROJECT}d -> Debug
 set(${PROJECT_NAME_PREFIX}DEBUG_POSTFIX d CACHE STRING "Debug library postfix.")
@@ -270,116 +272,154 @@ set_target_properties(
 		PROPERTIES
 		VERSION ${${PROJECT_NAME_PREFIX}VERSION}
 		SOVERSION ${${PROJECT_NAME_PREFIX}MAJOR_VERSION}
-		PUBLIC_HEADER "${${PROJECT_NAME}_HEADER}"
+		PUBLIC_HEADER "${${PROJECT_NAME_PREFIX}HEADER}"
 		DEBUG_POSTFIX "${${PROJECT_NAME_PREFIX}DEBUG_POSTFIX}")
 
 # INSTALL TARGETS
 if (${PROJECT_NAME_PREFIX}INSTALL)
-	include(CMakePackageConfigHelpers)
-	doc_var(
-			${PROJECT_NAME_PREFIX}CMAKE_DIR
-			${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-			STRING
-			"Installation directory for cmake files, a relative path that "
-			"will be joined with ${CMAKE_INSTALL_PREFIX} or an absolute "
-			"path."
-	)
+#	include(CMakePackageConfigHelpers)
+#	doc_var(
+#			${PROJECT_NAME_PREFIX}CMAKE_DIR
+#			${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+#			STRING
+#			"Installation directory for cmake files, a relative path that "
+#			"will be joined with ${CMAKE_INSTALL_PREFIX} or an absolute "
+#			"path."
+#	)
+#
+#	set(version_config ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake)
+#	set(project_config ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake)
+#	set(pkgconfig ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.pc)
+#	set(targets_export_name ${PROJECT_NAME}-targets)
+#
+#	doc_var(
+#			${PROJECT_NAME_PREFIX}LIB_DIR
+#			${CMAKE_INSTALL_LIBDIR}
+#			STRING
+#			"Installation directory for libraries, a relative path that "
+#			"will be joined to ${CMAKE_INSTALL_PREFIX} or an absolute path."
+#	)
+#
+#	doc_var(
+#			${PROJECT_NAME_PREFIX}PKGCONFIG_DIR
+#			${CMAKE_INSTALL_LIBDIR}/pkgconfig
+#			PATH
+#			"Installation directory for pkgconfig (.pc) files, a relative "
+#			"path that will be joined with ${CMAKE_INSTALL_PREFIX} or an "
+#			"absolute path."
+#	)
+#
+#	# Generate the version, config and target files into the build directory.
+#	write_basic_package_version_file(
+#			${version_config}
+#			VERSION ${${PROJECT_NAME_PREFIX}VERSION}
+#			COMPATIBILITY AnyNewerVersion
+#	)
+#
+#	# Set ${PROJECT_NAME_PREFIX}LIB_NAME for pkg-config ${PROJECT_NAME}.pc.
+#	# We cannot use the OUTPUT_NAME target
+#	# property because it's not set by default.
+#	set(${PROJECT_NAME_PREFIX}LIB_NAME ${PROJECT_NAME})
+#	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+#		set(${PROJECT_NAME_PREFIX}LIB_NAME "${${PROJECT_NAME_PREFIX}LIB_NAME}${${PROJECT_NAME_PREFIX}DEBUG_POSTFIX}")
+#	endif ()
+#
+#	# `exec_prefix` and `preifx` defined in `${PROJECT_NAME}-config.pc.in`
+#	set(library_path_for_pc_file "\${exec_prefix}/${${PROJECT_NAME_PREFIX}LIB_DIR}")
+#	set(include_path_for_pc_file "\${prefix}/${${PROJECT_NAME_PREFIX}INSTALL_HEADERS}")
+#
+#	if (EXISTS "${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}.pc.in")
+#		configure_file(
+#				"${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}.pc.in"
+#				"${pkgconfig}"
+#				@ONLY)
+#	else ()
+#		message(FATAL_ERROR "Can't find the configuration file ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}.pc.in!")
+#	endif ()
+#
+#	if (EXISTS "${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}-config.cmake.in")
+#		configure_package_config_file(
+#				${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}-config.cmake.in
+#				${project_config}
+#				INSTALL_DESTINATION ${${PROJECT_NAME_PREFIX}CMAKE_DIR})
+#	else ()
+#		message(FATAL_ERROR "Can't find the configuration file ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}-config.cmake.in!")
+#	endif (EXISTS "${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}-config.cmake.in")
+#
+#	set(INSTALL_TARGETS ${PROJECT_NAME})
+#
+#	# Install the library and headers.
+#	install(
+#			TARGETS ${INSTALL_TARGETS}
+#			EXPORT ${targets_export_name}
+#			LIBRARY DESTINATION ${${PROJECT_NAME_PREFIX}LIB_DIR}
+#			ARCHIVE DESTINATION ${${PROJECT_NAME_PREFIX}LIB_DIR}
+#			PUBLIC_HEADER DESTINATION "${${PROJECT_NAME_PREFIX}INSTALL_HEADERS}/${PROJECT_NAME}"
+#			FRAMEWORK DESTINATION "."
+#			RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+#
+#	# Use a namespace because CMake provides better diagnostics for namespaced
+#	# imported targets.
+#	export(
+#			TARGETS ${INSTALL_TARGETS}
+#			NAMESPACE ${PROJECT_NAME}::
+#			FILE ${PROJECT_BINARY_DIR}/${targets_export_name}.cmake)
+#
+#	# Install version, config and target files.
+#	install(
+#			FILES ${project_config} ${version_config}
+#			DESTINATION ${${PROJECT_NAME_PREFIX}CMAKE_DIR}
+#	)
+#	install(
+#			EXPORT ${targets_export_name}
+#			DESTINATION ${${PROJECT_NAME_PREFIX}CMAKE_DIR}
+#			NAMESPACE ${PROJECT_NAME}::
+#	)
+#	#install(
+#	#		FILES $<TARGET_PDB_FILE:${INSTALL_TARGETS}>
+#	#		DESTINATION ${${PROJECT_NAME_PREFIX}LIB_DIR} OPTIONAL
+#	#)
+#	install(
+#			FILES "${pkgconfig}"
+#			DESTINATION "${${PROJECT_NAME_PREFIX}PKGCONFIG_DIR}"
+#	)
 
-	set(version_config ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake)
-	set(project_config ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake)
-	set(pkgconfig ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.pc)
-	set(targets_export_name ${PROJECT_NAME}-targets)
+	# PackageProject.cmake will be used to make our target installable
+	CPMAddPackage("gh:TheLartians/PackageProject.cmake@1.10.0")
 
-	doc_var(
-			${PROJECT_NAME_PREFIX}LIB_DIR
-			${CMAKE_INSTALL_LIBDIR}
-			STRING
-			"Installation directory for libraries, a relative path that "
-			"will be joined to ${CMAKE_INSTALL_PREFIX} or an absolute path."
-	)
+	# the location where the project's version header will be placed should match the project's regular
+	# header paths
+	string(TOLOWER ${PROJECT_NAME}/version.h VERSION_HEADER_LOCATION)
 
-	doc_var(
-			${PROJECT_NAME_PREFIX}PKGCONFIG_DIR
-			${CMAKE_INSTALL_LIBDIR}/pkgconfig
-			PATH
-			"Installation directory for pkgconfig (.pc) files, a relative "
-			"path that will be joined with ${CMAKE_INSTALL_PREFIX} or an "
-			"absolute path."
-	)
-
-	# Generate the version, config and target files into the build directory.
-	write_basic_package_version_file(
-			${version_config}
-			VERSION ${${PROJECT_NAME_PREFIX}VERSION}
+	packageProject(
+			# the name of the target to export
+			NAME ${PROJECT_NAME}
+			# the version of the target to export
+			VERSION ${PROJECT_VERSION}
+			# (optional) install your library with a namespace (Note: do NOT add extra '::')
+			NAMESPACE ${PROJECT_NAME}
+			# a temporary directory to create the config files
+			BINARY_DIR ${PROJECT_BINARY_DIR}
+			# location of the target's public headers
+			# see target_include_directories -> BUILD_INTERFACE
+			INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include
+			# should match the target's INSTALL_INTERFACE include directory
+			# see target_include_directories -> INSTALL_INTERFACE
+			INCLUDE_DESTINATION ${${PROJECT_NAME_PREFIX}INSTALL_HEADERS}/${PROJECT_NAME}-${PROJECT_VERSION}
+			# (optional) create a header containing the version info
+			# Note: that the path to headers should be lowercase
+			VERSION_HEADER "${VERSION_HEADER_LOCATION}"
+			# (optional) define the project's version compatibility, defaults to `AnyNewerVersion`
+			# supported values: `AnyNewerVersion|SameMajorVersion|SameMinorVersion|ExactVersion`
 			COMPATIBILITY AnyNewerVersion
-	)
-
-	# Set ${PROJECT_NAME_PREFIX}LIB_NAME for pkg-config ${PROJECT_NAME}.pc.
-	# We cannot use the OUTPUT_NAME target
-	# property because it's not set by default.
-	set(${PROJECT_NAME_PREFIX}LIB_NAME ${PROJECT_NAME})
-	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-		set(${PROJECT_NAME_PREFIX}LIB_NAME "${${PROJECT_NAME_PREFIX}LIB_NAME}${${PROJECT_NAME_PREFIX}DEBUG_POSTFIX}")
-	endif ()
-
-	# `exec_prefix` and `preifx` defined in `${PROJECT_NAME}-config.pc.in`
-	set(library_path_for_pc_file "\${exec_prefix}/${${PROJECT_NAME_PREFIX}LIB_DIR}")
-	set(include_path_for_pc_file "\${prefix}/${${PROJECT_NAME_PREFIX}INSTALL_HEADERS}")
-
-	if (EXISTS "${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}.pc.in")
-		configure_file(
-				"${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}.pc.in"
-				"${pkgconfig}"
-				@ONLY)
-	else ()
-		message(FATAL_ERROR "Can't find the configuration file ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}.pc.in!")
-	endif ()
-
-	if (EXISTS "${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}-config.cmake.in")
-		configure_package_config_file(
-				${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}-config.cmake.in
-				${project_config}
-				INSTALL_DESTINATION ${${PROJECT_NAME_PREFIX}CMAKE_DIR})
-	else ()
-		message(FATAL_ERROR "Can't find the configuration file ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}-config.cmake.in!")
-	endif (EXISTS "${CMAKE_SOURCE_DIR}/cmake_modules/${PROJECT_NAME}-config.cmake.in")
-
-	set(INSTALL_TARGETS ${PROJECT_NAME})
-
-	# Install the library and headers.
-	install(
-			TARGETS ${INSTALL_TARGETS}
-			EXPORT ${targets_export_name}
-			LIBRARY DESTINATION ${${PROJECT_NAME_PREFIX}LIB_DIR}
-			ARCHIVE DESTINATION ${${PROJECT_NAME_PREFIX}LIB_DIR}
-			PUBLIC_HEADER DESTINATION "${${PROJECT_NAME_PREFIX}INSTALL_HEADERS}/${PROJECT_NAME}"
-			FRAMEWORK DESTINATION "."
-			RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-
-	# Use a namespace because CMake provides better diagnostics for namespaced
-	# imported targets.
-	export(
-			TARGETS ${INSTALL_TARGETS}
-			NAMESPACE ${PROJECT_NAME}::
-			FILE ${PROJECT_BINARY_DIR}/${targets_export_name}.cmake)
-
-	# Install version, config and target files.
-	install(
-			FILES ${project_config} ${version_config}
-			DESTINATION ${${PROJECT_NAME_PREFIX}CMAKE_DIR}
-	)
-	install(
-			EXPORT ${targets_export_name}
-			DESTINATION ${${PROJECT_NAME_PREFIX}CMAKE_DIR}
-			NAMESPACE ${PROJECT_NAME}::
-	)
-	#install(
-	#		FILES $<TARGET_PDB_FILE:${INSTALL_TARGETS}>
-	#		DESTINATION ${${PROJECT_NAME_PREFIX}LIB_DIR} OPTIONAL
-	#)
-	install(
-			FILES "${pkgconfig}"
-			DESTINATION "${${PROJECT_NAME_PREFIX}PKGCONFIG_DIR}"
+			# semicolon separated list of the project's dependencies
+			# see `LINK 3rd-PARTY LIBRARIES`
+			DEPENDENCIES ${${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES}
+			# (optional) option to disable the versioning of install destinations
+			DISABLE_VERSION_SUFFIX YES
+			# (optional) option to ignore target architecture for package resolution
+			# defaults to YES for header only (i.e. INTERFACE) libraries
+			ARCH_INDEPENDENT YES
 	)
 endif (${PROJECT_NAME_PREFIX}INSTALL)
 
