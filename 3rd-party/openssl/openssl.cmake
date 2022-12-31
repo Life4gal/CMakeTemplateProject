@@ -88,34 +88,54 @@ function(install_openssl_linux)
 	set(${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES ${${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES} "openssl ${LIB_OPENSSL_VERSION}" PARENT_SCOPE)
 endfunction(install_openssl_linux)
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+function(install_openssl_macos)
+	# see .github/workflows/main.yml --> runs-on: macos-latest --> Install libssl
+	# see .github/workflows/main.yml --> runs-on: macos-latest --> Configure
+	# todo: A better solution
+	set(ENV{PKG_CONFIG_PATH} "/usr/local/opt/openssl@3/lib/pkgconfig")
+
+	find_package(PkgConfig REQUIRED)
+
+	pkg_check_modules(LIB_OPENSSL REQUIRED openssl)
+
+	target_include_directories(
+			${PROJECT_NAME}
+			SYSTEM
+			PRIVATE
+			${LIB_OPENSSL_INCLUDE_DIRS}
+	)
+	target_link_directories(
+			${PROJECT_NAME}
+			PRIVATE
+			${LIB_OPENSSL_LIBRARY_DIRS}
+	)
+	target_link_libraries(
+			${PROJECT_NAME}
+			PRIVATE
+			${LIB_OPENSSL_LIBRARIES}
+	)
+
+	# If it is not the Windows platform then delete the FindOpenSSL.cmake that may have been generated previously.
+	file(REMOVE ${PROJECT_SOURCE_DIR}/cmake_modules/FindOpenSSL.cmake)
+
+	set(${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES ${${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES} "openssl ${LIB_OPENSSL_VERSION}" PARENT_SCOPE)
+endfunction(install_openssl_macos)
+
+if (${PROJECT_NAME_PREFIX}PLATFORM_WINDOWS)
 	#########################
-	# MSVC
+	# MSVC / CLANG-CL
 	########################
 	install_openssl_windows()
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+elseif (${PROJECT_NAME_PREFIX}PLATFORM_LINUX)
 	#########################
-	# GCC
+	# GCC / CLANG
 	########################
 	install_openssl_linux()
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-	if (CMAKE_CXX_SIMULATE_ID MATCHES "MSVC")
-		#########################
-		# CLANG-CL
-		########################
-		install_openssl_windows()
-	else ()
-		#########################
-		# CLANG
-		########################
-		install_openssl_linux()
-	endif (CMAKE_CXX_SIMULATE_ID MATCHES "MSVC")
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
+elseif (${PROJECT_NAME_PREFIX}PLATFORM_MACOS)
 	#########################
-	# CLANG
+	# APPLE CLANG
 	########################
-	# todo
-	install_openssl_linux()
+	install_openssl_macos()
 else ()
 	message(FATAL_ERROR "Unsupported compilers: ${CMAKE_CXX_COMPILER}")
-endif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+endif (${PROJECT_NAME_PREFIX}PLATFORM_WINDOWS)
