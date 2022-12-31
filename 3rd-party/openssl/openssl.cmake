@@ -49,6 +49,14 @@ function(install_openssl_windows)
 			COPYONLY
 	)
 
+	# generate FindOpenSSL.cmake for find_package.
+	# It looks like if we provide a FindOpenSSL.cmake directly, cmake will use ours (instead of its own), even though it is considered an empty file on linux.
+	configure_file(
+			${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/openssl/FindOpenSSL.cmake.in
+			${PROJECT_SOURCE_DIR}/cmake_modules/FindOpenSSL.cmake
+			COPYONLY
+	)
+
 	set(${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES ${${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES} "${LIB_OPENSSL_NAME} ${LIB_OPENSSL_VERSION}" PARENT_SCOPE)
 endfunction(install_openssl_windows)
 
@@ -73,6 +81,9 @@ function(install_openssl_linux)
 			PRIVATE
 			${LIB_OPENSSL_LIBRARIES}
 	)
+
+	# If it is not the Windows platform then delete the FindOpenSSL.cmake that may have been generated previously.
+	file(REMOVE ${PROJECT_SOURCE_DIR}/cmake_modules/FindOpenSSL.cmake)
 
 	set(${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES ${${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES} "openssl ${LIB_OPENSSL_VERSION}" PARENT_SCOPE)
 endfunction(install_openssl_linux)
