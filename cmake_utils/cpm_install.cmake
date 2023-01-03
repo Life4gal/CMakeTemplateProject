@@ -45,7 +45,7 @@ function(
 		# )
 	else ()
 		# todo: https://github.com/cpm-cmake/CPM.cmake/issues/433
-		message(WARNING "Library [${linked_project}] not found!")
+		message(FATAL_ERROR "Library [${linked_project}] not found!")
 	endif (${linked_project}_ADDED)
 
 	###############################################
