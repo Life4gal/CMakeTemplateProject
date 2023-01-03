@@ -1,0 +1,35 @@
+# We have to specify variables `OPENSSL_CRYPTO_LIBRARY`,`OPENSSL_SSL_LIBRARY` and `OPENSSL_FOUND` to make `find_package` happy
+# variables like `OPENSSL_INCLUDE_DIR`,`OPENSSL_LIBRARIES` and `OPENSSL_ROOT_DIR` don't look very necessary
+#set(OPENSSL_FOUND ON)
+#set(OPENSSL_ROOT_DIR ${LIB_OPENSSL_PATH}/bin)
+#
+#set(OPENSSL_INCLUDE_DIR ${LIB_OPENSSL_PATH}/include)
+#set(OPENSSL_VERSION ${LIB_OPENSSL_VERSION})
+#
+#set(OPENSSL_CRYPTO_LIBRARY ${LIB_OPENSSL_PATH}/bin/libcrypto-vc142-x64-1_1_0.lib)
+#set(OPENSSL_SSL_LIBRARY ${LIB_OPENSSL_PATH}/bin/libssl-vc142-x64-1_1_0.lib)
+
+find_path(
+        OPENSSL_INCLUDE_DIR
+        NAMES openssl/opensslv.h
+        PATHS ${LIB_OPENSSL_PATH}/include
+        REQUIRED
+)
+find_library(
+        OPENSSL_CRYPTO_LIBRARY
+        NAMES libcrypto-vc142-x64-1_1_0
+        PATHS ${LIB_OPENSSL_PATH}/bin
+        REQUIRED
+)
+find_library(
+        OPENSSL_SSL_LIBRARY
+        NAMES libssl-vc142-x64-1_1_0
+        PATHS ${LIB_OPENSSL_PATH}/bin
+        REQUIRED
+)
+
+if (OPENSSL_CRYPTO_LIBRARY AND OPENSSL_SSL_LIBRARY)
+    set(OPENSSL_FOUND ON)
+    set(OPENSSL_LIBRARIES ${OPENSSL_CRYPTO_LIBRARY} ${OPENSSL_SSL_LIBRARY})
+    set(OPENSSL_ROOT_DIR ${LIB_OPENSSL_PATH})
+endif (OPENSSL_CRYPTO_LIBRARY AND OPENSSL_SSL_LIBRARY)
