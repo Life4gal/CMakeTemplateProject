@@ -1,4 +1,4 @@
-CPMFindPackage(
+CPMAddPackage(
 		NAME spdlog
 		VERSION 1.10.0
 		GITHUB_REPOSITORY "gabime/spdlog"

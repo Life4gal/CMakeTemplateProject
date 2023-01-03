@@ -1,4 +1,4 @@
-CPMFindPackage(
+CPMAddPackage(
 		NAME fmt
 		# GIT_TAG master
 		GIT_TAG 9.1.0

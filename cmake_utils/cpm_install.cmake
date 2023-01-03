@@ -38,9 +38,6 @@ function(
 	if (${linked_project}_ADDED)
 		# downloaded
 		message(STATUS "Successfully added [${linked_project}], the source files path is [${${linked_project}_SOURCE_DIR}], the binary files path is [${${linked_project}_BINARY_DIR}]!")
-	elseif(${linked_project}_FOUND)
-		# find_package found it
-		message(STATUS "Found the local [${linked_project}] package, the source files path is [${${linked_project}_SOURCE_DIR}], the binary files path is [${${linked_project}_BINARY_DIR}]!")
 		# add_subdirectory(
 		# 		${${linked_project}_SOURCE_DIR}
 		# 		${${linked_project}_BINARY_DIR}

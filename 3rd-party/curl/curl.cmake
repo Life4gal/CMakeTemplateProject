@@ -1,4 +1,4 @@
-CPMFindPackage(
+CPMAddPackage(
 		NAME CURL
 		GIT_TAG curl-7_87_0
 		GITHUB_REPOSITORY "curl/curl"

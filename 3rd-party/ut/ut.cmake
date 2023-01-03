@@ -1,4 +1,4 @@
-CPMFindPackage(
+CPMAddPackage(
 		NAME ut
 		GIT_TAG v1.1.9
 		GITHUB_REPOSITORY "boost-ext/ut"
