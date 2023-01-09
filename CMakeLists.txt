@@ -113,6 +113,10 @@ file(MAKE_DIRECTORY ${${PROJECT_NAME_PREFIX}TEMP_MODULE_PATH})
 list(APPEND CMAKE_MODULE_PATH ${${PROJECT_NAME_PREFIX}MODULE_PATH})
 list(APPEND CMAKE_MODULE_PATH ${${PROJECT_NAME_PREFIX}TEMP_MODULE_PATH})
 
+# A folder for temporary storage of header files, for some header-only projects, it is much easier to download just a single file than to download the whole project.
+set(${PROJECT_NAME_PREFIX}TEMP_HEADER_PATH ${CMAKE_BINARY_DIR}/temp_include)
+file(MAKE_DIRECTORY ${${PROJECT_NAME_PREFIX}TEMP_HEADER_PATH})
+
 # Macros about the compiler.
 set(${PROJECT_NAME_PREFIX}COMPILER_ID ${CMAKE_CXX_COMPILER_ID})
 set(${PROJECT_NAME_PREFIX}COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
@@ -277,6 +281,12 @@ target_include_directories(
 		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 		$<INSTALL_INTERFACE:${${PROJECT_NAME_PREFIX}INSTALL_HEADERS}/${PROJECT_NAME}-${PROJECT_VERSION}>
 )
+target_include_directories(
+		${PROJECT_NAME}
+		SYSTEM
+		PRIVATE
+		$<BUILD_INTERFACE:${${PROJECT_NAME_PREFIX}TEMP_HEADER_PATH}>
+)
 
 # LINK 3rd-PARTY LIBRARIES
 set(${PROJECT_NAME_PREFIX}3RD_PARTY_DEPENDENCIES "")
@@ -284,6 +294,7 @@ include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/fmtlib/fmt.cmake)
 include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/spdlog/spdlog.cmake)
 include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/openssl/openssl.cmake)
 include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/curl/curl.cmake)
+include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/stb/image.cmake)
 
 message(STATUS "=======================================")
 message(STATUS "[${PROJECT_NAME}] DEPENDENCIES:")

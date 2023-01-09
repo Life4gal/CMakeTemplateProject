@@ -1,5 +1,7 @@
 #include <openssl/evp.h>
 #include <spdlog/spdlog.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 
 #include <CMakeTemplateProject/hello.hpp>
 
@@ -41,5 +43,15 @@ namespace ctp
 		OPENSSL_free(md5_digest);
 
 		return ret;
+	}
+
+	auto load_image(std::string_view filename, int* x, int* y, int* channels, int desired_channels) -> std::uint8_t*
+	{
+		return stbi_load(filename.data(), x, y, channels, desired_channels);
+	}
+
+	auto free_image(std::uint8_t* image) -> void
+	{
+		stbi_image_free(image);
 	}
 }// namespace ctp

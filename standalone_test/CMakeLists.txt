@@ -29,6 +29,19 @@ target_link_libraries(
 		CMakeTemplateProject::CMakeTemplateProject
 )
 
+# create test.png
+set(TEST_PNG_FILE_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test.png)
+file(
+		TOUCH
+		${TEST_PNG_FILE_PATH}
+)
+
+target_compile_definitions(
+		${PROJECT_NAME}
+		PRIVATE
+		TEST_PNG_FILE_PATH="${TEST_PNG_FILE_PATH}"
+)
+
 add_test(
 		NAME ${PROJECT_NAME}
 		COMMAND ${PROJECT_NAME}
