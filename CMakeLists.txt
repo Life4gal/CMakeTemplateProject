@@ -117,6 +117,10 @@ list(APPEND CMAKE_MODULE_PATH ${${PROJECT_NAME_PREFIX}TEMP_MODULE_PATH})
 set(${PROJECT_NAME_PREFIX}TEMP_HEADER_PATH ${CMAKE_BINARY_DIR}/temp_include)
 file(MAKE_DIRECTORY ${${PROJECT_NAME_PREFIX}TEMP_HEADER_PATH})
 
+# A folder for temporary storage of downloaded and decompressed files.
+set(${PROJECT_NAME_PREFIX}TEMP_ARCHIVE_PATH ${CMAKE_BINARY_DIR}/temp_archive)
+file(MAKE_DIRECTORY ${${PROJECT_NAME_PREFIX}TEMP_ARCHIVE_PATH})
+
 # Macros about the compiler.
 set(${PROJECT_NAME_PREFIX}COMPILER_ID ${CMAKE_CXX_COMPILER_ID})
 set(${PROJECT_NAME_PREFIX}COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
@@ -295,6 +299,8 @@ include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/spdlog/spdlog.cmake)
 include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/openssl/openssl.cmake)
 include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/curl/curl.cmake)
 include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/stb/image.cmake)
+include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/freetype/freetype.cmake)
+include(${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/fontconfig/fontconfig.cmake)
 
 message(STATUS "=======================================")
 message(STATUS "[${PROJECT_NAME}] DEPENDENCIES:")

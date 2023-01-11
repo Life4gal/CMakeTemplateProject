@@ -15,4 +15,6 @@ namespace ctp
 
 	CTP_EXPORTED_SYMBOL auto load_image(std::string_view filename, int* x, int* y, int* channels, int desired_channels = 4) -> std::uint8_t*;
 	CTP_EXPORTED_SYMBOL auto free_image(std::uint8_t* image) -> void;
+
+	CTP_EXPORTED_SYMBOL auto fontconfig_version() -> int;
 }// namespace ctp

@@ -1,6 +1,8 @@
 #include <openssl/evp.h>
 #include <spdlog/spdlog.h>
 #define STB_IMAGE_IMPLEMENTATION
+#include <fontconfig/fontconfig.h>
+#include <freetype/freetype.h>
 #include <stb/stb_image.h>
 
 #include <CMakeTemplateProject/hello.hpp>
@@ -53,5 +55,10 @@ namespace ctp
 	auto free_image(std::uint8_t* image) -> void
 	{
 		stbi_image_free(image);
+	}
+
+	auto fontconfig_version() -> int
+	{
+		return FcGetVersion();
 	}
 }// namespace ctp

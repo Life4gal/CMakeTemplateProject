@@ -28,4 +28,8 @@ auto main() -> int
 				<< "\tchannels: " << channels << '\n';
 		ctp::free_image(data);
 	}
+
+	{
+		std::cout << "fontconfig version: " << ctp::fontconfig_version() << '\n';
+	}
 }
