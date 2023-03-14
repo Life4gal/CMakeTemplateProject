@@ -5,7 +5,11 @@ function(install_openssl_windows)
 	set(LIB_OPENSSL_PATH ${CMAKE_BINARY_DIR}/packages/${LIB_OPENSSL_NAME}.${LIB_OPENSSL_VERSION}/build/native)
 	set(LIB_OPENSSL_PATH ${CMAKE_BINARY_DIR}/packages/${LIB_OPENSSL_NAME}.${LIB_OPENSSL_VERSION}/build/native PARENT_SCOPE)
 
-	nuget_install(LIB_OPENSSL ${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/openssl/openssl.config.in)
+	cmake_language(
+			CALL
+			${PROJECT_NAME_PREFIX}nuget_install
+			LIB_OPENSSL ${${PROJECT_NAME_PREFIX}3RD_PARTY_PATH}/openssl/openssl.config.in
+	)
 
 	add_library(OpenSSL::Crypto SHARED IMPORTED)
 	set_target_properties(
