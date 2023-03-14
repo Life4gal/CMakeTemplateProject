@@ -4,13 +4,13 @@ function(
 		${PROJECT_NAME_PREFIX}cpm_pack_header_only
 		library_name
 )
-	if (${library_name}_ADDED)
+	if (${library_name}_ADDED OR DEFINED ${library_name}_SOURCE_DIR)
 		message(STATUS "An interface library will be generated for library ${library_name}, the included headers' path is [${${library_name}_SOURCE_DIR}/include].")
 		add_library(${library_name} INTERFACE IMPORTED GLOBAL)
 		target_include_directories(${library_name} SYSTEM INTERFACE ${${library_name}_SOURCE_DIR}/include)
 	else ()
 		message(FATAL_ERROR "Library ${library_name} is not installed and cannot generate target for it!")
-	endif (${library_name}_ADDED)
+	endif (${library_name}_ADDED OR DEFINED ${library_name}_SOURCE_DIR)
 
 	# mark it
 	set(${library_name}_HEADER_ONLY_GENERATED PARENT_SCOPE)
@@ -35,7 +35,7 @@ function(
 	################ ADD LIBRARY ##################
 	###############################################
 	# see CPM.cmake --> cpm_export_variables
-	if (${linked_project}_ADDED)
+	if (${linked_project}_ADDED OR (DEFINED ${linked_project}_SOURCE_DIR AND DEFINED ${linked_project}_BINARY_DIR))
 		# downloaded
 		message(STATUS "Successfully added [${linked_project}], the source files path is [${${linked_project}_SOURCE_DIR}], the binary files path is [${${linked_project}_BINARY_DIR}]!")
 		# add_subdirectory(
@@ -46,7 +46,7 @@ function(
 	else ()
 		# todo: https://github.com/cpm-cmake/CPM.cmake/issues/433
 		message(FATAL_ERROR "Library [${linked_project}] not found!")
-	endif (${linked_project}_ADDED)
+	endif (${linked_project}_ADDED OR (DEFINED ${linked_project}_SOURCE_DIR AND DEFINED ${linked_project}_BINARY_DIR))
 
 	###############################################
 	########### CHECK OPTIONAL ARGS ###############
