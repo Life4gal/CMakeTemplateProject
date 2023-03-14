@@ -27,6 +27,9 @@ if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 else ()
 endif (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
+# fetch remote cmake utils
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake_utils/fetch_utils.cmake)
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake_utils/doc_var.cmake)
 
 # Set the default CMAKE_BUILD_TYPE to RelWithDebInfo.
