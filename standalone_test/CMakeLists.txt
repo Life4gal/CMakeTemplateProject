@@ -30,10 +30,20 @@ target_link_libraries(
 )
 
 # create test.png
-set(TEST_PNG_FILE_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test.png)
-file(
-		TOUCH
-		${TEST_PNG_FILE_PATH}
+get_target_property(
+		target_binary_directory
+		${PROJECT_NAME}
+		RUNTIME_OUTPUT_DIRECTORY
+)
+
+set(TEST_PNG_FILE_PATH ${target_binary_directory}/test.png)
+
+add_custom_command(
+		TARGET ${PROJECT_NAME}
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E echo "Creating test png file '${TEST_PNG_FILE_PATH}'."
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${target_binary_directory}
+		COMMAND ${CMAKE_COMMAND} -E touch ${TEST_PNG_FILE_PATH}
 )
 
 target_compile_definitions(
