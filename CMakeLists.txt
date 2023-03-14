@@ -52,9 +52,9 @@ project(
 		LANGUAGES CXX
 )
 if (${${PROJECT_NAME_PREFIX}MASTER_PROJECT})
-	message(STATUS "Our project [${PROJECT_NAME}] is the main-project. CMAKE VERSION: ${CMAKE_VERSION}. Compiler ID: ${CMAKE_CXX_COMPILER_ID}. Platform: ${CMAKE_SYSTEM_NAME}.")
+	message(STATUS "Our project [${PROJECT_NAME}] is the main-project. CMAKE VERSION: ${CMAKE_VERSION}. Compiler ID: ${CMAKE_CXX_COMPILER_ID}. Platform: ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}.")
 else ()
-	message(STATUS "Our project [${PROJECT_NAME}] is the sub-project. CMAKE VERSION: ${CMAKE_VERSION}. Compiler ID: ${CMAKE_CXX_COMPILER_ID}. Platform: ${CMAKE_SYSTEM_NAME}.")
+	message(STATUS "Our project [${PROJECT_NAME}] is the sub-project. CMAKE VERSION: ${CMAKE_VERSION}. Compiler ID: ${CMAKE_CXX_COMPILER_ID}. Platform: ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}.")
 endif (${${PROJECT_NAME_PREFIX}MASTER_PROJECT})
 message(STATUS "${PROJECT_NAME} VERSION: ${${PROJECT_NAME_PREFIX}VERSION}")
 message(STATUS "${PROJECT_NAME} BUILD TYPE: ${CMAKE_BUILD_TYPE}")
