@@ -4,7 +4,7 @@ include(CMakeParseArguments)
 #   set(<variable> <value>... CACHE <type> <docstring>...)
 # This allows splitting a long docstring for readability.
 function(
-		doc_var
+		${PROJECT_NAME_PREFIX}doc_var
 		variable_name
 		variable_value
 		variable_type
@@ -35,4 +35,4 @@ function(
 	join(doc ${ARGN})
 
 	set(${variable_name} ${variable_value} CACHE ${variable_type} ${doc})
-endfunction()
+endfunction(${PROJECT_NAME_PREFIX}doc_var)

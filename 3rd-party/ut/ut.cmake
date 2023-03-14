@@ -5,4 +5,8 @@ CPMAddPackage(
 		OPTIONS "BOOST_UT_USE_WARNINGS_AS_ERORS ON"
 )
 
-cpm_install(${PROJECT_NAME} ut PRIVATE)
+cmake_language(
+		CALL
+		${PROJECT_NAME_PREFIX}cpm_install
+		${PROJECT_NAME} ut PRIVATE
+)

@@ -1,7 +1,7 @@
 set(CPM_INSTALL_LINK_TYPE PUBLIC PRIVATE INTERFACE)
 
 function(
-		cpm_pack_header_only
+		${PROJECT_NAME_PREFIX}cpm_pack_header_only
 		library_name
 )
 	if (${library_name}_ADDED)
@@ -14,10 +14,10 @@ function(
 
 	# mark it
 	set(${library_name}_HEADER_ONLY_GENERATED PARENT_SCOPE)
-endfunction(cpm_pack_header_only)
+endfunction(${PROJECT_NAME_PREFIX}cpm_pack_header_only)
 
 function(
-		cpm_install
+		${PROJECT_NAME_PREFIX}cpm_install
 		this_project
 		linked_project
 		link_type
@@ -114,4 +114,4 @@ function(
 			PRIVATE
 			${${linked_project}_SOURCE_DIR}/include
 	)
-endfunction(cpm_install)
+endfunction(${PROJECT_NAME_PREFIX}cpm_install)
